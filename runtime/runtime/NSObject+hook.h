@@ -1,5 +1,5 @@
 //
-//  Person.h
+//  NSObject+hook.h
 //  runtime
 //
 //  Created by wuyongchao on 2018/5/28.
@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Person : NSObject
-@property (copy,nonatomic) NSString *name;
-@property (copy,nonatomic) NSString *sex;
-@property (copy,nonatomic) NSString *age;
-// - (void)eat;
+@interface NSObject (hook)
++ (instancetype)modelWithDict:(NSDictionary *)dict;
 @end

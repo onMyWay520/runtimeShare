@@ -9,6 +9,10 @@
 #import "ViewController.h"
 #import "Person.h"
 #import <objc/message.h>
+#import "UIImage+Swizzling.h"
+#import "NSObject+hook.h"
+#define SCREENT_HEIGHT      [[UIScreen mainScreen] bounds].size.height
+#define SCREENT_WIDTH       [[UIScreen mainScreen] bounds].size.width
 @interface ViewController ()
 
 @end
@@ -18,7 +22,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self messageLearn];
-
+    [self swizzleImage];
+    [self modelWithDict];
+}
+#pragma mark - 字典转模型
+-(void)modelWithDict{
+    NSDictionary *dic = @{@"name":@"我",
+                          @"sex":@"男",
+                          @"age":@25
+                          };
+    Person *model = [Person modelWithDict:dic];
+    NSLog(@"name:%@  sex:%@  age:%@",model.name,model.sex,model.age);
+}
+#pragma mark - 交换方法
+-(void)swizzleImage{
+    UIImageView *imgView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREENT_WIDTH, SCREENT_HEIGHT)];
+    imgView.image=[UIImage yc_imageNamed:@"guide"];
+    [self.view addSubview:imgView];
 }
 #pragma mark - 消息转发机制
 -(void)messageLearn{

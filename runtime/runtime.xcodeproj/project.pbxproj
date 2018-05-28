@@ -16,6 +16,8 @@
 		56FC8DB320BBB7B200226E97 /* runtimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FC8DB220BBB7B200226E97 /* runtimeTests.m */; };
 		56FC8DBE20BBB7B200226E97 /* runtimeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FC8DBD20BBB7B200226E97 /* runtimeUITests.m */; };
 		56FC8DCD20BBD0E800226E97 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FC8DCC20BBD0E800226E97 /* Person.m */; };
+		56FC8DD620BBEB7500226E97 /* UIImage+Swizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FC8DD520BBEB7500226E97 /* UIImage+Swizzling.m */; };
+		56FC8DD920BBF69600226E97 /* NSObject+hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FC8DD820BBF69600226E97 /* NSObject+hook.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,10 @@
 		56FC8DBF20BBB7B200226E97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56FC8DCB20BBD0E800226E97 /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		56FC8DCC20BBD0E800226E97 /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		56FC8DD420BBEB7500226E97 /* UIImage+Swizzling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Swizzling.h"; sourceTree = "<group>"; };
+		56FC8DD520BBEB7500226E97 /* UIImage+Swizzling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Swizzling.m"; sourceTree = "<group>"; };
+		56FC8DD720BBF69600226E97 /* NSObject+hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+hook.h"; sourceTree = "<group>"; };
+		56FC8DD820BBF69600226E97 /* NSObject+hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+hook.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +116,10 @@
 				56FC8D9D20BBB7AF00226E97 /* ViewController.m */,
 				56FC8DCB20BBD0E800226E97 /* Person.h */,
 				56FC8DCC20BBD0E800226E97 /* Person.m */,
+				56FC8DD420BBEB7500226E97 /* UIImage+Swizzling.h */,
+				56FC8DD520BBEB7500226E97 /* UIImage+Swizzling.m */,
+				56FC8DD720BBF69600226E97 /* NSObject+hook.h */,
+				56FC8DD820BBF69600226E97 /* NSObject+hook.m */,
 				56FC8D9F20BBB7AF00226E97 /* Main.storyboard */,
 				56FC8DA220BBB7B200226E97 /* Assets.xcassets */,
 				56FC8DA420BBB7B200226E97 /* LaunchScreen.storyboard */,
@@ -271,6 +281,8 @@
 				56FC8DA920BBB7B200226E97 /* main.m in Sources */,
 				56FC8DCD20BBD0E800226E97 /* Person.m in Sources */,
 				56FC8D9B20BBB7AF00226E97 /* AppDelegate.m in Sources */,
+				56FC8DD920BBF69600226E97 /* NSObject+hook.m in Sources */,
+				56FC8DD620BBEB7500226E97 /* UIImage+Swizzling.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
