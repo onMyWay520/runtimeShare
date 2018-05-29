@@ -57,7 +57,7 @@
     objc_msgSend(person, @selector(eat));
     // 当然，objc_msgSend 可以传递参数
     Person *per=objc_msgSend(objc_msgSend(objc_getClass("Person"), sel_registerName("alloc")), sel_registerName("init"));
-    objc_msgSend(per, @selector(run:), 100);
+//    objc_msgSend(per, @selector(run:), 100);
 }
 
 - (void)didReceiveMemoryWarning {
