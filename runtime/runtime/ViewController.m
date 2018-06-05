@@ -11,6 +11,7 @@
 #import <objc/message.h>
 #import "UIImage+Swizzling.h"
 #import "NSObject+hook.h"
+#import "ArchieveModel.h"
 #define SCREENT_HEIGHT      [[UIScreen mainScreen] bounds].size.height
 #define SCREENT_WIDTH       [[UIScreen mainScreen] bounds].size.width
 @interface ViewController ()
@@ -21,9 +22,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self messageLearn];
-    [self swizzleImage];
-    [self modelWithDict];
+//    [self messageLearn];
+//    [self swizzleImage];
+//    [self modelWithDict];
+    [self encodeAndDecode];
+}
+//归档和解档
+-(void)encodeAndDecode{
+    ArchieveModel *model=[[ArchieveModel alloc]init];
+    model.name=@"张三";
+    model.age=@25;
+    model.height=@168;
+    //  归档文件的路径
+    NSString *filePath = [NSHomeDirectory()stringByAppendingPathComponent:@"person.archiver"];
+    //  判断该文件是否存在
+    if (![[NSFileManager defaultManager]fileExistsAtPath:filePath]) {
+        //  不存在的时候，归档存储一个Student的对象
+        NSMutableData *data = [NSMutableData data];
+        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:data];
+        [archiver encodeObject:model forKey:@"student"];
+        [archiver finishEncoding];
+        BOOL success = [data writeToFile:filePath atomically:YES];
+        if (success) {
+         NSLog(@"归档成功！");
+        }
+    }
+    else{
+        //  存在的时候，不再进行归档，而是解挡！
+        NSData *data = [NSData dataWithContentsOfFile:filePath];
+        NSKeyedUnarchiver *unArchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+        ArchieveModel *studentFromSaving = [unArchiver decodeObjectForKey:@"student"];
+       NSLog(@"%@",studentFromSaving.name);
+    }
+
 }
 #pragma mark - 字典转模型
 -(void)modelWithDict{
