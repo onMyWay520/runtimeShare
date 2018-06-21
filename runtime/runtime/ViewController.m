@@ -25,7 +25,14 @@
 //    [self messageLearn];
 //    [self swizzleImage];
 //    [self modelWithDict];
-    [self encodeAndDecode];
+//    [self encodeAndDecode];
+    //在debug模式下回崩溃，在release模式下正常，切换模式即可，可以减少线上闪退
+    NSArray * a = [[NSArray alloc] init];
+    [self ArrayAbnormal:a];
+}
+-(void)ArrayAbnormal:(NSArray *)array{
+    [array objectAtIndex:22];
+    
 }
 //归档和解档
 -(void)encodeAndDecode{
