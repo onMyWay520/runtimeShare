@@ -10,6 +10,9 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 @implementation ArchieveModel
+-(void)eat{
+    NSLog(@"吃吃吃，我是消息转发过来的");
+}
 -(void)encodeWithCoder:(NSCoder *)aCoder{
     unsigned int outCount=0;
     Ivar *vars=class_copyIvarList([self  class], &outCount);
