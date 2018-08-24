@@ -40,7 +40,7 @@
     }
     return [super resolveInstanceMethod:sel];
 }
-//将无法处理的selector转发给其他对象
+//将无法处理的selector转发给其他对象，上面的两个方法没有实现时，会调用下面的方法，会进行消息转发，指向其他类，调其他类中有的这个方法
 -(id)forwardingTargetForSelector:(SEL)aSelector{
     if (aSelector==@selector(eat)) {
         return [ArchieveModel new] ;
