@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		561A7EB62150D64A0053E1A7 /* UIViewController+IMPCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 561A7EB52150D64A0053E1A7 /* UIViewController+IMPCategory.m */; };
 		5641337620DB9CB900AD8A6C /* NSDictionary+NilSafe.m in Sources */ = {isa = PBXBuildFile; fileRef = 5641337520DB9CB900AD8A6C /* NSDictionary+NilSafe.m */; };
+		565954B32152400500D82A64 /* NSObject+YCKVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 565954B22152400500D82A64 /* NSObject+YCKVO.m */; };
 		5687AB3B20C6871000CA19DD /* ArchieveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5687AB3A20C6871000CA19DD /* ArchieveModel.m */; };
 		56FC8D9B20BBB7AF00226E97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FC8D9A20BBB7AF00226E97 /* AppDelegate.m */; };
 		56FC8D9E20BBB7AF00226E97 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FC8D9D20BBB7AF00226E97 /* ViewController.m */; };
@@ -45,6 +46,8 @@
 		561A7EB52150D64A0053E1A7 /* UIViewController+IMPCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+IMPCategory.m"; sourceTree = "<group>"; };
 		5641337420DB9CB900AD8A6C /* NSDictionary+NilSafe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+NilSafe.h"; sourceTree = "<group>"; };
 		5641337520DB9CB900AD8A6C /* NSDictionary+NilSafe.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+NilSafe.m"; sourceTree = "<group>"; };
+		565954B12152400500D82A64 /* NSObject+YCKVO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+YCKVO.h"; sourceTree = "<group>"; };
+		565954B22152400500D82A64 /* NSObject+YCKVO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+YCKVO.m"; sourceTree = "<group>"; };
 		5687AB3920C6871000CA19DD /* ArchieveModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchieveModel.h; sourceTree = "<group>"; };
 		5687AB3A20C6871000CA19DD /* ArchieveModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchieveModel.m; sourceTree = "<group>"; };
 		56FC8D9620BBB7AF00226E97 /* runtime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = runtime.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +138,8 @@
 				5641337520DB9CB900AD8A6C /* NSDictionary+NilSafe.m */,
 				561A7EB42150D64A0053E1A7 /* UIViewController+IMPCategory.h */,
 				561A7EB52150D64A0053E1A7 /* UIViewController+IMPCategory.m */,
+				565954B12152400500D82A64 /* NSObject+YCKVO.h */,
+				565954B22152400500D82A64 /* NSObject+YCKVO.m */,
 				56FC8D9F20BBB7AF00226E97 /* Main.storyboard */,
 				56FC8DA220BBB7B200226E97 /* Assets.xcassets */,
 				56FC8DA420BBB7B200226E97 /* LaunchScreen.storyboard */,
@@ -294,6 +299,7 @@
 			files = (
 				56FC8D9E20BBB7AF00226E97 /* ViewController.m in Sources */,
 				56FC8DA920BBB7B200226E97 /* main.m in Sources */,
+				565954B32152400500D82A64 /* NSObject+YCKVO.m in Sources */,
 				5687AB3B20C6871000CA19DD /* ArchieveModel.m in Sources */,
 				56FC8DCD20BBD0E800226E97 /* Person.m in Sources */,
 				56FC8D9B20BBB7AF00226E97 /* AppDelegate.m in Sources */,

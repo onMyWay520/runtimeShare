@@ -12,23 +12,31 @@
 #import "UIImage+Swizzling.h"
 #import "NSObject+hook.h"
 #import "ArchieveModel.h"
+#import "NSObject+YCKVO.h"
 #define SCREENT_HEIGHT      [[UIScreen mainScreen] bounds].size.height
 #define SCREENT_WIDTH       [[UIScreen mainScreen] bounds].size.width
 @interface ViewController ()
-
+@property(nonatomic,strong)Person *person;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self messageLearn];
+//    [self messageLearn];
 //    [self swizzleImage];
 //    [self modelWithDict];
 //    [self encodeAndDecode];
     //在debug模式下回崩溃，在release模式下正常，切换模式即可，可以减少线上闪退
 //    NSArray * a = [[NSArray alloc] init];
 //    [self ArrayAbnormal:a];
+    [self showKVO];
+}
+-(void)showKVO{
+    self.person=[Person new];
+    [self.person yc_addObserverBlockForKeyPath:@"name" block:^(id obj, id oldVale, id newVale) {
+        NSLog(@"kvo 修改name为%@",newVale);
+    }];
 }
 -(void)ArrayAbnormal:(NSArray *)array{
     [array objectAtIndex:22];
@@ -97,7 +105,16 @@
     Person *per=objc_msgSend(objc_msgSend(objc_getClass("Person"), sel_registerName("alloc")), sel_registerName("init"));
 //    objc_msgSend(per, @selector(run:), 100);
 }
-
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    static BOOL flag=NO;
+    if (!flag) {
+        self.person.name=@"yongchao";
+        flag=YES;
+    }
+    else{
+        self.person=nil;
+    }
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
