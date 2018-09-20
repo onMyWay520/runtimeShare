@@ -10,6 +10,8 @@
 #import <objc/runtime.h>
 @implementation NSObject (hook)
 const char *kPropertyListKey = "YCPropertyListKey";
+// 定义关联的key
+static const char *key = "name";
 //获取所有的关联对象
 + (NSArray *)yc_objcProperties
 {
@@ -60,6 +62,61 @@ const char *kPropertyListKey = "YCPropertyListKey";
     free(propertyList);
     return mtArray.copy;
 }
+/* 获取对象的所有方法 */
++(NSArray *)getAllMethods{
+    unsigned int methodCount =0;
+    Method* methodList = class_copyMethodList([self class],&methodCount);
+    NSMutableArray *methodsArray = [NSMutableArray arrayWithCapacity:methodCount];
+    
+    for(int i=0;i<methodCount;i++){
+        Method temp = methodList[i];
+        IMP imp = method_getImplementation(temp);
+        SEL name_f = method_getName(temp);
+        const char* name_s =sel_getName(method_getName(temp));
+        int arguments = method_getNumberOfArguments(temp);
+        const char* encoding =method_getTypeEncoding(temp);
+        NSLog(@"方法名：%@,参数个数：%d,编码方式：%@",[NSString stringWithUTF8String:name_s],
+              arguments,
+              [NSString stringWithUTF8String:encoding]);
+        [methodsArray addObject:[NSString stringWithUTF8String:name_s]];
+    }
+    free(methodList);
+    return methodsArray;
+}
+/*获取协议列表*/
++(NSArray *)getProtocolList{
+    unsigned int count=0;
+    __unsafe_unretained Protocol **protocolList=class_copyProtocolList([self class], &count);
+    NSMutableArray *mutableList=[NSMutableArray arrayWithCapacity:count];
+    for (unsigned int i=0; i<count; i++) {
+        Protocol *protocol=protocolList[i];
+        const char *protocolName=protocol_getName(protocol);
+        [mutableList addObject:[NSString stringWithUTF8String:protocolName]];
+    }
+    return [NSArray arrayWithArray:mutableList];
+}
+/*获取类名*/
++(NSString *)getClassName{
+    const char *className=class_getName([self class]);
+    return [NSString stringWithUTF8String:className];
+}
+/*获取成员变量*/
++(NSArray *)getIvarList{
+    unsigned int count=0;
+    Ivar *ivarList=class_copyIvarList([self class], &count);
+    NSMutableArray *mutableArray=[NSMutableArray arrayWithCapacity:count];
+    for (unsigned int i=0; i<count; i++) {
+        NSMutableDictionary *dic=[NSMutableDictionary dictionary];
+        const char *ivarName=ivar_getName(ivarList[i]);
+        const char *ivarType=ivar_getTypeEncoding(ivarList[i]);
+        dic[@"ivarName"]=[NSString stringWithUTF8String:ivarName];
+        dic[@"type"]=[NSString stringWithUTF8String:ivarType];
+        [mutableArray addObject:dic];
+    }
+    free(ivarList);
+    return [NSArray arrayWithArray:mutableArray];
+}
+/*字典转模型*/
 + (instancetype)modelWithDict:(NSDictionary *)dict {
     /* 实例化对象 */
     id objc = [[self alloc]init];
@@ -77,5 +134,15 @@ const char *kPropertyListKey = "YCPropertyListKey";
     /* 返回对象 */
     return objc;
 }
-
+-(NSString *)name{
+    // 根据关联的key，获取关联的值。
+    return objc_getAssociatedObject(self, key);
+}
+-(void)setName:(NSString *)name{
+    // 第一个参数：给哪个对象添加关联
+    // 第二个参数：关联的key，通过这个key获取
+    // 第三个参数：关联的value
+    // 第四个参数:关联的策略
+    objc_setAssociatedObject(self, key, name, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 @end

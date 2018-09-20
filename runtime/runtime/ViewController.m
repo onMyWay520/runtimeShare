@@ -13,6 +13,7 @@
 #import "NSObject+hook.h"
 #import "ArchieveModel.h"
 #import "NSObject+YCKVO.h"
+#import "NewModel.h"
 #define SCREENT_HEIGHT      [[UIScreen mainScreen] bounds].size.height
 #define SCREENT_WIDTH       [[UIScreen mainScreen] bounds].size.width
 @interface ViewController ()
@@ -31,7 +32,13 @@
 //    NSArray * a = [[NSArray alloc] init];
 //    [self ArrayAbnormal:a];
 //    [self showKVO];
-    [self showNotification];
+//    [self showNotification];
+    [self getAllMethod];
+//    [NewModel crateClass];
+}
+-(void)addProperty{
+    NSObject *object=[[NSObject alloc]init];
+    object.name=@"yongchao";
 }
 -(void)showKVO{
     self.person=[Person new];
@@ -48,6 +55,7 @@
     [array objectAtIndex:22];
     
 }
+
 #pragma mark - 归档和解档
 -(void)encodeAndDecode{
     ArchieveModel *model=[[ArchieveModel alloc]init];
@@ -86,6 +94,16 @@
     Person *model = [Person modelWithDict:dic];
     NSLog(@"name:%@  sex:%@  age:%@",model.name,model.sex,model.age);
 }
+-(void)getAllMethod{
+//    NSArray *array =[UIButton getAllMethods];//获取类中所有方法
+//    NSArray *propArray =[Person yc_objcProperties];//获取类中所有属性
+    NSArray *protolArray=[ArchieveModel getProtocolList];//获取类中所有协议
+//    NSString *className =[ViewController getClassName];//类名
+//    NSArray *array =[ViewController getIvarList];//获取类中所有成员变量
+
+//    NSLog(@"array==%@",array);
+    NSLog(@"protolArray==%@",protolArray);
+}
 #pragma mark - 交换方法
 -(void)swizzleImage{
     UIImageView *imgView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREENT_WIDTH, SCREENT_HEIGHT)];
@@ -122,6 +140,7 @@
     }
     [self yc_postNotificationWithName:@"YCNotification" userInfo:@{@"date" : @"2018-9-20"}];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
