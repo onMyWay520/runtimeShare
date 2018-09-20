@@ -30,12 +30,18 @@
     //在debug模式下回崩溃，在release模式下正常，切换模式即可，可以减少线上闪退
 //    NSArray * a = [[NSArray alloc] init];
 //    [self ArrayAbnormal:a];
-    [self showKVO];
+//    [self showKVO];
+    [self showNotification];
 }
 -(void)showKVO{
     self.person=[Person new];
     [self.person yc_addObserverBlockForKeyPath:@"name" block:^(id obj, id oldVale, id newVale) {
         NSLog(@"kvo 修改name为%@",newVale);
+    }];
+}
+-(void)showNotification{
+    [self yc_addNotificationForName:@"YCNotification" block:^(NSNotification * _Nonnull notification) {
+        NSLog(@"接收到通知===%@",notification.userInfo);
     }];
 }
 -(void)ArrayAbnormal:(NSArray *)array{
@@ -114,6 +120,7 @@
     else{
         self.person=nil;
     }
+    [self yc_postNotificationWithName:@"YCNotification" userInfo:@{@"date" : @"2018-9-20"}];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

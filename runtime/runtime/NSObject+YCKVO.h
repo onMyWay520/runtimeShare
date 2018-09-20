@@ -11,5 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSObject (YCKVO)
 #pragma mark - 注册监听者KVO
 -(void)yc_addObserverBlockForKeyPath:(NSString*)keyPath block:(void (^)(id obj, id oldVale, id newVale))block;
+- (void)yc_addNotificationForName:(NSString *)name block:(void (^)(NSNotification *notification))block;
+- (void)yc_postNotificationWithName:(NSString *)name userInfo:(NSDictionary *)userInfo;
 NS_ASSUME_NONNULL_END
 @end

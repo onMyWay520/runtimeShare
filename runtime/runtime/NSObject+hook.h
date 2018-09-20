@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NSObject (hook)
++ (NSArray *)yc_objcProperties;
 + (instancetype)modelWithDict:(NSDictionary *)dict;
 @end

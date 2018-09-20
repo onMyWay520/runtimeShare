@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 @implementation NSObject (hook)
 const char *kPropertyListKey = "YCPropertyListKey";
+//获取所有的关联对象
 + (NSArray *)yc_objcProperties
 {
     /* 获取关联对象 */

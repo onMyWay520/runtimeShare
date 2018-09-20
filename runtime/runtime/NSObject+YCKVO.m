@@ -18,7 +18,6 @@
 {
     NSMutableSet *kvoBlockSet;
     NSMutableSet *notificationBlockSet;
-
 }
 -(instancetype)init{
     self=[super init];
@@ -50,8 +49,15 @@
     [kvoBlockSet enumerateObjectsUsingBlock:^(void(^block)(__weak id obj,id oldValue,id newValue), BOOL * _Nonnull stop) {
         block(object,oldValue,newValue);
     }];
-    
-    
+}
+- (void)yc_addNotificationBlock:(void(^)(NSNotification *notification))block{
+    [notificationBlockSet addObject:[block copy]];
+}
+-(void)yc_doNotification:(NSNotification*)notification{
+    if (!notificationBlockSet.count) return;
+    [notificationBlockSet enumerateObjectsUsingBlock:^(void (^block)(NSNotification *notification), BOOL * _Nonnull stop) {
+        block(notification);
+    }];
 }
 @end
 @implementation NSObject (YCKVO)
@@ -116,6 +122,59 @@ static void *const YCKVOSemaphoreKey=@"YCKVOSemaphoreKey";
     [allTargets removeAllObjects];
     dispatch_semaphore_signal(kvoSemaphore);
 }
+
+static void *const YCNotificationBlockKey = "YCNotificationBlockKey";
+static void *const YCNotificationSemaphoreKey = "YCNotificationSemaphoreKey";
+#pragma mark - -------通知相关
+- (void)yc_addNotificationForName:(NSString *)name block:(void (^)(NSNotification *notification))block {
+    if (!name || !block) return;
+    dispatch_semaphore_t notificationSemaphore = [self yc_getSemaphoreWithKey:YCNotificationSemaphoreKey];
+    dispatch_semaphore_wait(notificationSemaphore, DISPATCH_TIME_FOREVER);// 返回0：表示正常。返回非0：表示等待时间超时
+    NSMutableDictionary *allTargets = objc_getAssociatedObject(self, YCNotificationBlockKey);
+    if (!allTargets) {
+        allTargets = @{}.mutableCopy;
+        objc_setAssociatedObject(self, YCNotificationBlockKey, allTargets, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    YCBlockTarget *target = allTargets[name];
+    if (!target) {
+        target = [YCBlockTarget new];
+        allTargets[name] = target;
+        [[NSNotificationCenter defaultCenter] addObserver:target selector:@selector(yc_doNotification:) name:name object:nil];
+    }
+    [target yc_addNotificationBlock:block];
+    [self yc_swizzleDealloc];
+    dispatch_semaphore_signal(notificationSemaphore);//信号通知
+}
+#pragma mark - 移除单个通知
+- (void)yc_removeNotificationForName:(NSString *)name{
+    if (!name) return;
+    NSMutableDictionary *allTargets = objc_getAssociatedObject(self, YCNotificationBlockKey);
+    if (!allTargets.count) return;
+    YCBlockTarget *target = allTargets[name];
+    if (!target) return;
+    dispatch_semaphore_t notificationSemaphore = [self yc_getSemaphoreWithKey:YCNotificationSemaphoreKey];
+    dispatch_semaphore_wait(notificationSemaphore, DISPATCH_TIME_FOREVER);
+    [[NSNotificationCenter defaultCenter] removeObserver:target];
+    [allTargets removeObjectForKey:name];
+   dispatch_semaphore_signal(notificationSemaphore);
+    
+}
+#pragma mark - 移除所有通知
+- (void)yc_removeAllNotification{
+    NSMutableDictionary *allTargets = objc_getAssociatedObject(self, YCNotificationBlockKey);
+    if (!allTargets.count) return;
+    dispatch_semaphore_t notificationSemaphore = [self yc_getSemaphoreWithKey:YCNotificationSemaphoreKey];
+    dispatch_semaphore_wait(notificationSemaphore, DISPATCH_TIME_FOREVER);
+    [allTargets enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, YCBlockTarget *target, BOOL * _Nonnull stop) {
+        [[NSNotificationCenter defaultCenter] removeObserver:target];
+    }];
+    [allTargets removeAllObjects];
+   dispatch_semaphore_signal(notificationSemaphore);
+}
+
+- (void)yc_postNotificationWithName:(NSString *)name userInfo:(NSDictionary *)userInfo{
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
+}
 static void * deallocHasSwizzledKey = "deallocHasSwizzledKey";
 /**
  *  调剂dealloc方法，由于无法直接使用运行时的swizzle方法对dealloc方法进行调剂，所以稍微麻烦一些
@@ -137,7 +196,7 @@ static void * deallocHasSwizzledKey = "deallocHasSwizzledKey";
             //在这里我们移除所有的KVO
             [objSelf yc_removeAllObserverBlock];
             //移除所有通知
-//            [objSelf xw_removeAllNotification];
+            [objSelf yc_removeAllNotification];
             //根据原有的dealloc方法是否存在进行判断
             if (originalDealloc == NULL) {//如果不存在，说明本类没有实现dealloc方法，则需要向父类发送dealloc消息(objc_msgSendSuper)
                 //构造objc_msgSendSuper所需要的参数，.receiver为方法的实际调用者，即为类本身，.super_class指向其父类
@@ -168,12 +227,12 @@ static void * deallocHasSwizzledKey = "deallocHasSwizzledKey";
         
     }
 }
-
+#pragma mark - 获取信号量
 -(dispatch_semaphore_t)yc_getSemaphoreWithKey:(void *)key{
-    dispatch_semaphore_t semaphore = objc_getAssociatedObject(self, key);
+    dispatch_semaphore_t semaphore = objc_getAssociatedObject(self, key); //获取关联对象
     if (!semaphore){
         semaphore = dispatch_semaphore_create(1);
-        objc_setAssociatedObject(self, key, semaphore, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, key, semaphore, OBJC_ASSOCIATION_RETAIN_NONATOMIC);//nonatomic, strong
     }
     return semaphore;
 }
